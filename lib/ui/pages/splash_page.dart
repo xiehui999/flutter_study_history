@@ -28,13 +28,30 @@ class SplashPageState extends State<SplashPage> {
     _initAsync();
   }
 
-  void _initAsync() async{
+  void _initAsync() async {
     await SpUtil.getInstance();
     _loadSplashData();
   }
 
   void _loadSplashData() {
+    _splashModel = SpHelper.getObject<SplashModel>(Constant.key_splash_model);
+    if (_splashModel != null) {
+      setState(() {});
+    }
+    HttpUtils httpUtils = new HttpUtils();
+    httpUtils.getSplash().then((model) {
+      if (!ObjectUtil.isEmpty(model.imgUrl)) {
+        if (_splashModel == null || (_splashModel.imgUrl != model.imgUrl)) {
+          SpHelper.putObject(Constant.key_splash_model, model);
 
+          setState(() {
+            _splashModel = model;
+          });
+        } else {
+          SpHelper.putObject(Constant.key_splash_model, null);
+        }
+      }
+    });
   }
 
   @override
