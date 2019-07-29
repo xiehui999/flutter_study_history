@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:base_library/base_library.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_study_history/common/component_index.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return null;
+    return new MyAppState();
   }
 }
 
@@ -17,6 +18,9 @@ class MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+//    setLocalizedSimpleValues(localizedSimpleValues);//配置简单多语言资源
+    setLocalizedValues(localizedValues); //配置多语言资源
+    _initAsync();
   }
 
   @override
@@ -33,6 +37,37 @@ class MyAppState extends State<MyApp> {
         accentColor: _themeColor,
         indicatorColor: Colors.white,
       ),
+      locale: _locale,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        CustomLocalizations.delegate,
+      ],
+      supportedLocales: CustomLocalizations.supportedLocales,
     );
+  }
+
+  void _initAsync() async {
+    await SpUtil.getInstance();
+    if (!mounted) return _init();
+    _loadLocale();
+  }
+
+  void _init() {}
+
+  void _loadLocale() {
+    setState(() {
+      LanguageModel model =
+          SpHelper.getObject<LanguageModel>(Constant.keyLanguage);
+      if (model != null) {
+        _locale = new Locale(model.languageCode, model.countryCode);
+      } else {
+        _locale = null;
+      }
+      String _colorKey = SpHelper.getThemeColor();
+      if (themeColorMap[_colorKey] != null) {
+        _themeColor = themeColorMap[_colorKey];
+      }
+    });
   }
 }
