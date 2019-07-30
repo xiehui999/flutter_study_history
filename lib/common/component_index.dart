@@ -4,3 +4,4 @@ export 'package:flutter_study_history/res/index.dart';
 export 'sp_helper.dart';
 export 'common.dart';
 export 'package:flutter_study_history/models/models.dart';
+export 'package:rxdart/rxdart.dart';

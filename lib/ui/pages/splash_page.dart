@@ -31,7 +31,27 @@ class SplashPageState extends State<SplashPage> {
   void _initAsync() async {
     await SpUtil.getInstance();
     _loadSplashData();
+    Observable.just(1).delay(new Duration(milliseconds: 500)).listen((_) {
+      if (SpUtil.getBool(Constant.key_guide, defValue: true) &&
+          ObjectUtil.isEmpty(_guidList)) {
+        SpUtil.putBool(Constant.key_guide, false);
+        _initBanner();
+      } else {
+        _initSplash();
+      }
+    });
   }
+
+  void _initBanner() {
+    _initBannerData();
+    setState(() {
+      _status = 2;
+    });
+  }
+
+  void _initBannerData() {}
+
+  void _initSplash() {}
 
   void _loadSplashData() {
     _splashModel = SpHelper.getObject<SplashModel>(Constant.key_splash_model);
@@ -54,8 +74,32 @@ class SplashPageState extends State<SplashPage> {
     });
   }
 
+  /**
+   * Stack  一种层叠布局
+   */
   @override
   Widget build(BuildContext context) {
-    return Text("222");
+    return new Material(
+      child: new Stack(
+        children: <Widget>[
+          new Offstage(
+            offstage: !(_status == 0),
+            child: _buildSplashBg(),
+          )
+        ],
+      ),
+    );
+  }
+
+  /**
+   * 设置double.infinity可以强制撑满容器
+   */
+  Widget _buildSplashBg() {
+    return new Image.asset(
+      Utils.getImgPath('splash_bg'),
+      width: double.infinity,
+      height: double.infinity,
+      fit: BoxFit.fitHeight,
+    );
   }
 }
