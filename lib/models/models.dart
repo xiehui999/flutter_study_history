@@ -47,6 +47,13 @@ class SplashModel {
         url = json['url'],
         imgUrl = json['imgUrl'];
 
+  Map<String, dynamic> toJson() => {
+        'title': title,
+        'content': content,
+        'url': url,
+        'imgUrl': imgUrl,
+      };
+
   @override
   String toString() {
     StringBuffer sb = new StringBuffer('{');
