@@ -10,8 +10,9 @@ class SplashPage extends StatefulWidget {
 
 class SplashPageState extends State<SplashPage> {
   TimerUtil _timerUtil;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
-  List<String> _guidList = [
+  List<String> _guideList = [
     Utils.getImgPath('guide1'),
     Utils.getImgPath('guide2'),
     Utils.getImgPath('guide3'),
@@ -33,11 +34,12 @@ class SplashPageState extends State<SplashPage> {
     _loadSplashData();
     Observable.just(1).delay(new Duration(milliseconds: 500)).listen((_) {
       if (SpUtil.getBool(Constant.key_guide, defValue: true) &&
-          ObjectUtil.isEmpty(_guidList)) {
+          ObjectUtil.isEmpty(_guideList)) {
         SpUtil.putBool(Constant.key_guide, false);
         _initBanner();
       } else {
-        _initSplash();
+//        _initSplash();
+        _initBanner();
       }
     });
   }
@@ -49,12 +51,84 @@ class SplashPageState extends State<SplashPage> {
     });
   }
 
-  void _initBannerData() {}
+  void _initBannerData() {
+    for (int i = 0, length = _guideList.length; i < length; i++) {
+      if (i == length - 1) {
+        _bannerList.add(new Stack(
+          children: <Widget>[
+            new Image.asset(
+              _guideList[i],
+              width: double.infinity,
+              height: double.infinity,
+              fit: BoxFit.fill,
+            ),
+            new Align(
+              alignment: Alignment.bottomCenter,
+              child: new Container(
+                margin: EdgeInsets.only(bottom: 160.0),
+                child: new InkWell(
+                  onTap: () {
+                    _scaffoldKey.currentState.showSnackBar(
+                        SnackBar(content: new Text('11111111111')));
+                  },
+                  child: new CircleAvatar(
+                    radius: 48,
+                    backgroundColor: Colors.indigoAccent,
+                    child: new Padding(
+                      padding: EdgeInsets.all(2.0),
+                      child: new Text(
+                        '立即体验',
+                        style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ));
+      } else {
+        _bannerList.add(new Image.asset(
+          _guideList[i],
+          fit: BoxFit.fill,
+          width: double.infinity,
+          height: double.infinity,
+        ));
+      }
+    }
+  }
 
-  void _initSplash() {}
+  void _initSplash() {
+    if (_splashModel == null) {
+      _goMain();
+    } else {
+      _doCountDown();
+    }
+  }
+
+  void _goMain() {}
+
+  void _doCountDown() {
+    setState(() {
+      _status = 1;
+    });
+    _timerUtil = new TimerUtil(mTotalTime: 3 * 1000);
+    _timerUtil.setOnTimerTickCallback((int tick) {
+      double _tick = tick / 1000;
+      setState(() {
+        _count = _tick.toInt();
+      });
+      if (_tick == 0) {
+        _goMain();
+      }
+    });
+    _timerUtil.startCountDown();
+  }
 
   void _loadSplashData() {
     _splashModel = SpHelper.getObject<SplashModel>(Constant.key_splash_model);
+    _splashModel = null;
+    LogUtil.e(_splashModel);
     if (_splashModel != null) {
       setState(() {});
     }
@@ -79,14 +153,33 @@ class SplashPageState extends State<SplashPage> {
    */
   @override
   Widget build(BuildContext context) {
-    return new Material(
-      child: new Stack(
-        children: <Widget>[
-          new Offstage(
-            offstage: !(_status == 0),
-            child: _buildSplashBg(),
-          )
-        ],
+    LogUtil.e(_status);
+    LogUtil.e(_bannerList);
+    return new Scaffold(
+      key: _scaffoldKey,
+      body: new Material(
+        child: new Stack(
+          children: <Widget>[
+            new Offstage(
+              offstage: !(_status == 0),
+              child: _buildSplashBg(),
+            ),
+            new Offstage(
+              offstage: !(_status == 2),
+              child: ObjectUtil.isEmpty(_bannerList)
+                  ? new Container()
+                  : new Swiper(
+                      autoStart: false,
+                      circular: false,
+                      indicator: CircleSwiperIndicator(
+                          radius: 4.0,
+                          padding: EdgeInsets.only(bottom: 30.0),
+                          itemColor: Colors.black26),
+                      children: _bannerList,
+                    ),
+            )
+          ],
+        ),
       ),
     );
   }
