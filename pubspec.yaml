@@ -31,6 +31,9 @@ dependencies:
   # rxdart https://github.com/ReactiveX/rxdart
   rxdart: ^0.22.1
 
+  # 网络图片加载
+  # https://github.com/renefloor/flutter_cached_network_image
+  cached_network_image: ^1.1.1
   # https://github.com/flutterchina/flukit.
   flukit: ^1.0.0
   base_library:

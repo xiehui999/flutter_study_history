@@ -34,12 +34,11 @@ class SplashPageState extends State<SplashPage> {
     _loadSplashData();
     Observable.just(1).delay(new Duration(milliseconds: 500)).listen((_) {
       if (SpUtil.getBool(Constant.key_guide, defValue: true) &&
-          ObjectUtil.isEmpty(_guideList)) {
+          ObjectUtil.isNotEmpty(_guideList)) {
         SpUtil.putBool(Constant.key_guide, false);
         _initBanner();
       } else {
-//        _initSplash();
-        _initBanner();
+        _initSplash();
       }
     });
   }
@@ -137,7 +136,6 @@ class SplashPageState extends State<SplashPage> {
       if (!ObjectUtil.isEmpty(model.imgUrl)) {
         if (_splashModel == null || (_splashModel.imgUrl != model.imgUrl)) {
           SpHelper.putObject(Constant.key_splash_model, model);
-
           setState(() {
             _splashModel = model;
           });
@@ -146,6 +144,27 @@ class SplashPageState extends State<SplashPage> {
         }
       }
     });
+  }
+
+  Widget _buildAdWidget() {
+    if (_splashModel == null)
+      return new Container(
+        height: 0.0,
+      );
+    return new Offstage(
+      offstage: !(_status == 1),
+      child: new InkWell(
+        onTap: () {},
+        child: new Container(
+          alignment: Alignment.center,
+          child: new CachedNetworkImage(
+            imageUrl: _splashModel.imgUrl,
+            placeholder: (context, url) => _buildSplashBg(),
+            errorWidget: (context, url, error) => _buildSplashBg(),
+          ),
+        ),
+      ),
+    );
   }
 
   /**
@@ -177,6 +196,34 @@ class SplashPageState extends State<SplashPage> {
                           itemColor: Colors.black26),
                       children: _bannerList,
                     ),
+            ),
+            _buildAdWidget(),
+            new Offstage(
+              offstage: !(_status == 1),
+              child: new Container(
+                alignment: Alignment.bottomRight,
+                margin: EdgeInsets.all(20.0),
+                child: InkWell(
+                  onTap: () {
+                    _goMain();
+                  },
+                  child: new Container(
+                      padding: EdgeInsets.all(12.0),
+                      child: new Text(
+                        IntlUtil.getString(context, Ids.jump_count,
+                            params: ['$_count']),
+                        style: new TextStyle(
+                          fontSize: 14.0,
+                          color: Colors.white,
+                        ),
+                      ),
+                      decoration: new BoxDecoration(
+                          color: Color(0x66000000),
+                          borderRadius: BorderRadius.all(Radius.circular(4.0)),
+                          border: new Border.all(
+                              width: 0.33, color: AppColors.divider))),
+                ),
+              ),
             )
           ],
         ),

@@ -6,3 +6,4 @@ export 'common.dart';
 export 'package:flukit/flukit.dart';
 export 'package:flutter_study_history/models/models.dart';
 export 'package:rxdart/rxdart.dart';
+export 'package:cached_network_image/cached_network_image.dart';
