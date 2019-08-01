@@ -32,6 +32,7 @@ class MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
+      routes: {BaseConstant.routeMain: (context) => MainPage()},
       home: new SplashPage(),
       theme: ThemeData.light().copyWith(
         primaryColor: _themeColor,
@@ -59,7 +60,7 @@ class MyAppState extends State<MyApp> {
   void _loadLocale() {
     setState(() {
       LanguageModel model =
-      SpHelper.getObject<LanguageModel>(Constant.keyLanguage);
+          SpHelper.getObject<LanguageModel>(Constant.keyLanguage);
       if (model != null) {
         _locale = new Locale(model.languageCode, model.countryCode);
       } else {

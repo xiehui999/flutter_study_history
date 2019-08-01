@@ -105,7 +105,9 @@ class SplashPageState extends State<SplashPage> {
     }
   }
 
-  void _goMain() {}
+  void _goMain() {
+    RouteUtil.goMain(context);
+  }
 
   void _doCountDown() {
     setState(() {
