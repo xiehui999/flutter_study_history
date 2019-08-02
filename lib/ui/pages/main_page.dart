@@ -21,7 +21,11 @@ class MainPage extends StatelessWidget {
         length: _allPages.length,
         child: new Scaffold(
           appBar: new MyAppBar(
+            actions: <Widget>[
+              new IconButton(icon: new Icon(Icons.search), onPressed: null)
+            ],
             leading: new Container(
+              margin: EdgeInsets.all(6.0),
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   image: DecorationImage(
@@ -30,7 +34,30 @@ class MainPage extends StatelessWidget {
             centerTitle: true,
             title: TabLayout(),
           ),
+          body: new TabBarViewLayout(),
         ));
+  }
+}
+
+class TabBarViewLayout extends StatelessWidget {
+  Widget buildTabView(BuildContext context, _Page page) {
+    String labelId = page.labelId;
+    switch (labelId) {
+      case Ids.titleHome:
+        return new Text('测试');
+        break;
+      default:
+        return Container(child: new Text('默认页面'));
+        break;
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return new TabBarView(
+        children: _allPages.map((_Page page) {
+      return buildTabView(context, page);
+    }).toList());
   }
 }
 
