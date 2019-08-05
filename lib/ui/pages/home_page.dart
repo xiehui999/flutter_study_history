@@ -12,6 +12,22 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     RefreshController _controller = new RefreshController();
     final MainBloc bloc = BlocProvider.of<MainBloc>(context);
-    return null;
+    bloc.homeEventStream.listen((event) {
+      if (labelId == event.labelId) {
+        _controller.sendBack(false, event.status);
+      }
+    });
+    if (isHomeInit) {
+      isHomeInit = false;
+      Observable.just(1).delay(new Duration(milliseconds: 500)).listen((_) {
+        bloc.onRefresh(labelId: labelId);
+      });
+    }
+    return new StreamBuilder(
+        stream: bloc.bannerStream,
+        builder: (BuildContext context,
+            AsyncSnapshot<List<BannerModel>> snapshot) {
+          return new Refresh
+        });
   }
 }

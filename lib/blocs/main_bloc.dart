@@ -1,8 +1,20 @@
 import 'package:flutter_study_history/common/component_index.dart';
 
 class MainBloc implements BlocBase {
+  BehaviorSubject<List<BannerModel>> _banner =
+      BehaviorSubject<List<BannerModel>>();
 
-//  BehaviorSubject;
+  Sink<List<BannerModel>> get _bannerSink => _banner.sink;
+
+  Stream<List<BannerModel>> get bannerStream => _banner.stream;
+
+  BehaviorSubject<StatusEvent> _homeEvent = BehaviorSubject<StatusEvent>();
+
+  Sink<StatusEvent> get homeEvebtSink => _homeEvent.sink;
+
+  Stream<StatusEvent> get homeEventStream =>
+      _homeEvent.stream.asBroadcastStream();
+
   @override
   void dispose() {
     // TODO: implement dispose

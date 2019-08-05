@@ -39,6 +39,9 @@ dependencies:
 
   # https://github.com/peng8350/flutter_pulltorefresh
   pull_to_refresh: 1.1.6
+
+  # Flutter 城市列表 https://github.com/flutterchina/azlistview
+  azlistview: ^0.1.2  #latest version
   base_library:
     path: ../flutter_study_history/base_library
 
