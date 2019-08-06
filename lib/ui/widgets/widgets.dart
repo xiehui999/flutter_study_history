@@ -70,10 +70,12 @@ class StatusViews extends StatelessWidget {
                     width: 100,
                     height: 100,
                   ),
+                  Gaps.vGap10,
                   new Text(
                     "网络出问题了，请您检查网络设置",
                     style: TextStyles.listContent,
                   ),
+                  Gaps.vGap5,
                   new Text(
                     "点击屏幕，重新加载",
                     style: TextStyles.listContent,
@@ -83,6 +85,41 @@ class StatusViews extends StatelessWidget {
             ),
           ),
         );
+        break;
+      case LoadStatus.loading:
+        return new Container(
+          child: new ProgressView(),
+          alignment: Alignment.center,
+          color: AppColors.gray_f0,
+        );
+        break;
+      case LoadStatus.empty:
+        return new Container(
+          color: Colors.white,
+          width: double.infinity,
+          child: new Center(
+            child: new Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Image.asset(
+                  Utils.getImgPath('ic_data_empty'),
+                  package: BaseConstant.packageBase,
+                  width: 60,
+                  height: 60,
+                ),
+                Gaps.vGap10,
+                new Text(
+                  '空空如也...',
+                  style: TextStyles.listContent2,
+                )
+              ],
+            ),
+          ),
+        );
+        break;
+      default:
+        return new Container();
+        break;
     }
     return null;
   }
