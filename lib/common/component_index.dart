@@ -12,3 +12,4 @@ export 'package:flutter_study_history/blocs/blocs_index.dart';
 export 'package:flutter_study_history/event/event.dart';
 
 export 'package:flutter_study_history/data/protocol/models.dart';
+export 'package:flutter_study_history/ui/widgets/widget_index.dart';

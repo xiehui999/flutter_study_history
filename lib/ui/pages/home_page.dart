@@ -25,9 +25,79 @@ class HomePage extends StatelessWidget {
     }
     return new StreamBuilder(
         stream: bloc.bannerStream,
-        builder: (BuildContext context,
-            AsyncSnapshot<List<BannerModel>> snapshot) {
-          return new Refresh
+        builder:
+            (BuildContext context, AsyncSnapshot<List<BannerModel>> snapshot) {
+          return new RefreshScaffold(
+            controller: _controller,
+            labelId: labelId,
+            loadStatus: Utils.getLoadStatus(snapshot.hasError, snapshot.data),
+            enablePullUp: false,
+            onRefresh: ({bool isReload}) {
+              return bloc.onRefresh(labelId: labelId);
+            },
+            child: new ListView(
+              children: <Widget>[
+                new StreamBuilder(
+                    stream: bloc.recItemStream,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<ComModel> snapshot) {
+                      ComModel model = bloc.hotRecModel;
+                      if (model == null) {
+                        return Container(
+                          height: 0.0,
+                        );
+                      }
+                      return Container(
+                        height: 0.0,
+                      );
+                    }),
+                buildBanner(context, snapshot.data),
+              ],
+            ),
+          );
         });
+  }
+
+  /**
+   * AspectRatio
+   */
+  Widget buildBanner(BuildContext context, List<BannerModel> list) {
+    if (ObjectUtil.isEmpty(list)) {
+      return Container(height: 0);
+    }
+    return AspectRatio(
+      aspectRatio: 16.0 / 9.0,
+      child: Swiper(
+          indicatorAlignment: AlignmentDirectional.topEnd,
+          circular: true,
+          interval: new Duration(seconds: 5),
+          indicator: NumberSwiperIndicator(),
+          children: list.map((model) {
+            return InkWell(
+              onTap: () {
+                // TODO 跳转
+              },
+              child: new CachedNetworkImage(
+                  fit: BoxFit.fill,
+                  placeholder: (context, url) => ProgressView(),
+                  errorWidget: (context, url, error) => new Icon(Icons.error),
+                  imageUrl: model.imagePath),
+            );
+          }).toList()),
+    );
+  }
+}
+
+class NumberSwiperIndicator extends SwiperIndicator {
+  @override
+  Widget build(BuildContext context, int index, int itemCount) {
+    return Container(
+      decoration: BoxDecoration(
+          color: Colors.black45, borderRadius: BorderRadius.circular(20.0)),
+      margin: EdgeInsets.only(top: 10.0, right: 5.0),
+      padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.0),
+      child: Text("${++index}/$itemCount",
+          style: TextStyle(color: Colors.white70, fontSize: 11.0)),
+    );
   }
 }

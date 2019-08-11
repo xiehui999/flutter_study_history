@@ -15,6 +15,19 @@ class MainBloc implements BlocBase {
   Stream<StatusEvent> get homeEventStream =>
       _homeEvent.stream.asBroadcastStream();
 
+  ComModel hotRecModel;
+  BehaviorSubject<ComModel> _recItem = BehaviorSubject<ComModel>();
+
+  Sink<ComModel> get _recItemSink => _recItem.sink;
+
+  Stream<ComModel> get recItemStream => _recItem.stream.asBroadcastStream();
+  BehaviorSubject<List<ComModel>> _recList = BehaviorSubject<List<ComModel>>();
+
+  Sink<List<ComModel>> get _recListSink => _recList.sink;
+
+  Stream<List<ComModel>> get recListStream =>
+      _recList.stream.asBroadcastStream();
+
   @override
   void dispose() {
     // TODO: implement dispose
