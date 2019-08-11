@@ -15,6 +15,10 @@ dependencies:
   # Flutter 常用工具类库 https://github.com/Sky24n/flustars
 
   flustars: '>=0.2.6 <1.0.0'
+
+  # https://github.com/flutterchina/dio
+  dio: 1.0.13
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

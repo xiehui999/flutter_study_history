@@ -1,4 +1,6 @@
+import 'dart:collection';
 import 'package:flutter_study_history/common/component_index.dart';
+import 'package:flutter_study_history/data/repository/wan_repository.dart';
 
 class MainBloc implements BlocBase {
   BehaviorSubject<List<BannerModel>> _banner =
@@ -27,6 +29,9 @@ class MainBloc implements BlocBase {
 
   Stream<List<ComModel>> get recListStream =>
       _recList.stream.asBroadcastStream();
+  WanRepository wanRepository = new WanRepository();
+
+  HttpUtils httpUtils = new HttpUtils();
 
   @override
   void dispose() {
@@ -35,7 +40,11 @@ class MainBloc implements BlocBase {
 
   @override
   Future getData({String labelId, int page}) {
-    // TODO: implement getData
+    LogUtil.e("getData......" + labelId + page.toString());
+    switch (labelId) {
+      case Ids.titleHome:
+        return getHomeData(labelId);
+    }
     return null;
   }
 
@@ -48,6 +57,25 @@ class MainBloc implements BlocBase {
   @override
   Future onRefresh({String labelId}) {
     // TODO: implement onRefresh
+    switch (labelId) {
+      case Ids.titleHome:
+        getHotRecItem();
+        break;
+    }
+    return getData(labelId: labelId, page: 0);
+  }
+
+  void getHotRecItem() {
     return null;
+  }
+
+  Future getHomeData(String labelId) {
+    return getBanner(labelId);
+  }
+
+  Future getBanner(String labelId) {
+    return wanRepository.getBanner().then((list) {
+      _bannerSink.add(UnmodifiableListView<BannerModel>(list));
+    });
   }
 }
