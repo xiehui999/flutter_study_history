@@ -29,15 +29,15 @@ class BlocProvider<T extends BlocBase> extends StatefulWidget {
 
   static T of<T extends BlocBase>(BuildContext context) {
     final type = _typeOf<BlocProvider<T>>();
-    _BlocProviderInherited<T> provider =
-        context.ancestorInheritedElementForWidgetOfExactType(type).widget;
+    BlocProvider<T> provider =
+        context.ancestorWidgetOfExactType(type);
     return provider.bloc;
   }
 
   static Type _typeOf<T>() => T;
 }
 
-class _BlocProviderState<T> extends State<BlocProvider> {
+class _BlocProviderState<T> extends State<BlocProvider<BlocBase>> {
   @override
   void dispose() {
     if (widget.userDispose) widget.bloc.dispose();

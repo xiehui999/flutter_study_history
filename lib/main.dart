@@ -3,7 +3,9 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_study_history/common/component_index.dart';
 import 'package:flutter_study_history/ui/pages/page_index.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(BlocProvider<ApplicationBloc>(
+    child: BlocProvider(child: MyApp(), bloc: MainBloc()),
+    bloc: ApplicationBloc()));
 
 class MyApp extends StatefulWidget {
   @override
@@ -60,7 +62,7 @@ class MyAppState extends State<MyApp> {
   void _loadLocale() {
     setState(() {
       LanguageModel model =
-          SpHelper.getObject<LanguageModel>(Constant.keyLanguage);
+      SpHelper.getObject<LanguageModel>(Constant.keyLanguage);
       if (model != null) {
         _locale = new Locale(model.languageCode, model.countryCode);
       } else {
