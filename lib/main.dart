@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_study_history/common/component_index.dart';
@@ -53,16 +54,29 @@ class MyAppState extends State<MyApp> {
 
   void _initAsync() async {
     await SpUtil.getInstance();
-    if (!mounted) return _init();
+    if (!mounted) return;
+    _init();
     _loadLocale();
   }
 
-  void _init() {}
+  void _init() {
+    Options options = DioUtil.getDefOptions();
+    options.baseUrl = Constant.server_address;
+    String cookie = SpUtil.getString(BaseConstant.keyAppToken);
+    LogUtil.e("111111111111111");
+    if (ObjectUtil.isNotEmpty(cookie)) {
+      Map<String, dynamic> _headers = new Map();
+      _headers["Cookie"] = cookie;
+      options.headers = _headers;
+    }
+    HttpConfig httpConfig = new HttpConfig(options: options);
+    DioUtil().setConfig(httpConfig);
+  }
 
   void _loadLocale() {
     setState(() {
       LanguageModel model =
-      SpHelper.getObject<LanguageModel>(Constant.keyLanguage);
+          SpHelper.getObject<LanguageModel>(Constant.keyLanguage);
       if (model != null) {
         _locale = new Locale(model.languageCode, model.countryCode);
       } else {

@@ -56,7 +56,7 @@ class DioUtil {
   static bool _isDebug = false;
 
   static DioUtil getInstance() {
-    _singleton;
+    return _singleton;
   }
 
   factory DioUtil() {
@@ -81,7 +81,10 @@ class DioUtil {
     _statusKey = config.status ?? _statusKey;
     _codeKey = config.code ?? _codeKey;
     _msgKey = config.msg ?? _msgKey;
-    _mergeOption(_options);
+    print(config.options.baseUrl);
+    _mergeOption(config.options);
+    print('22222222');
+    print(_options.baseUrl);
     _pem = config.pem ?? _pem;
     if (_dio != null) {
       _dio.options = _options;
