@@ -210,13 +210,13 @@ class DioUtil {
         response.statusCode == HttpStatus.created) {
       try {
         if (response.data is Map) {
+
           _status = (response.data[_statusKey] is int)
               ? response.data[_statusKey].toString()
               : response.data[_statusKey];
-
           _code = (response.data[_codeKey] is String)
               ? int.tryParse(response.data[_codeKey])
-              : response.data[_dataKey];
+              : response.data[_codeKey];
           _msg = response.data[_msgKey];
           _data = response.data[_dataKey];
         } else {
@@ -232,6 +232,7 @@ class DioUtil {
         }
         return new BaseResp(_status, _code, _msg, _data);
       } catch (e) {
+        print(e);
         return new Future.error(new DioError(
             response: response,
             message: "data parsing exception...",

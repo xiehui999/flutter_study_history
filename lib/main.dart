@@ -70,6 +70,7 @@ class MyAppState extends State<MyApp> {
       options.headers = _headers;
     }
     HttpConfig httpConfig = new HttpConfig(options: options);
+    DioUtil.openDebug();
     DioUtil().setConfig(httpConfig);
   }
 
