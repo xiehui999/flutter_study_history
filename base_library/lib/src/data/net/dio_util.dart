@@ -83,7 +83,6 @@ class DioUtil {
     _msgKey = config.msg ?? _msgKey;
     print(config.options.baseUrl);
     _mergeOption(config.options);
-    print('22222222');
     print(_options.baseUrl);
     _pem = config.pem ?? _pem;
     if (_dio != null) {
@@ -195,6 +194,8 @@ class DioUtil {
 
   Future<BaseResp<T>> request<T>(String method, String path,
       {data, Options options, CancelToken cancelToken}) async {
+    print(path);
+    print(333333333);
     Response response = await _dio.request(path,
         data: data,
         options: _checkOptions(method, options),

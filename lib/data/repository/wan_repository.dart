@@ -5,8 +5,7 @@ import '../api/apis.dart';
 
 class WanRepository {
   Future<List<BannerModel>> getBanner() async {
-    BaseResp<List> baseResp =
-        await DioUtil().request<List>(Method.get, WanAndroidApi.BANNER);
+    BaseResp<List> baseResp = await DioUtil().request<List>(Method.get, WanAndroidApi.getPath(path:WanAndroidApi.BANNER));
     List<BannerModel> bannerList;
     if (baseResp.code != Constant.status_success) {
       return new Future.error(baseResp.msg);
