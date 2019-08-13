@@ -5,7 +5,8 @@ import '../api/apis.dart';
 
 class WanRepository {
   Future<List<BannerModel>> getBanner() async {
-    BaseResp<List> baseResp = await DioUtil().request<List>(Method.get, WanAndroidApi.getPath(path:WanAndroidApi.BANNER));
+    BaseResp<List> baseResp = await DioUtil().request<List>(
+        Method.get, WanAndroidApi.getPath(path: WanAndroidApi.BANNER));
     List<BannerModel> bannerList;
     if (baseResp.code != Constant.status_success) {
       return new Future.error(baseResp.msg);
@@ -16,5 +17,23 @@ class WanRepository {
       }).toList();
     }
     return bannerList;
+  }
+
+  Future<List<ReposModel>> getProjectList({int page: 1, data}) async {
+    BaseResp<Map<String, dynamic>> baseResp = await DioUtil()
+        .request<Map<String, dynamic>>(Method.get,
+            WanAndroidApi.getPath(path: WanAndroidApi.PROJECT_LIST, page: page),
+            data: data);
+    List<ReposModel> list;
+    if (baseResp.code != Constant.status_success) {
+      return new Future.error(baseResp.msg);
+    }
+    if (baseResp.data != null) {
+      ComData comData = ComData.fromJson(baseResp.data);
+      list = comData.datas.map((value) {
+        return ReposModel.fromJson(value);
+      }).toList();
+    }
+    return list;
   }
 }

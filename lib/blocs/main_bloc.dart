@@ -27,6 +27,13 @@ class MainBloc implements BlocBase {
 
   Sink<List<ComModel>> get _recListSink => _recList.sink;
 
+  BehaviorSubject<List<ReposModel>> _recRepos =
+      BehaviorSubject<List<ReposModel>>();
+
+  Sink<List<ReposModel>> get _recReposSink => _recRepos.sink;
+
+  Stream<List<ReposModel>> get recReposStream => _recRepos.stream;
+
   Stream<List<ComModel>> get recListStream =>
       _recList.stream.asBroadcastStream();
   WanRepository wanRepository = new WanRepository();
@@ -35,7 +42,8 @@ class MainBloc implements BlocBase {
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    _banner.close();
+    _recRepos.close();
   }
 
   @override
@@ -50,13 +58,11 @@ class MainBloc implements BlocBase {
 
   @override
   Future onLoadMore({String labelId}) {
-    // TODO: implement onLoadMore
     return null;
   }
 
   @override
   Future onRefresh({String labelId}) {
-    // TODO: implement onRefresh
     switch (labelId) {
       case Ids.titleHome:
         getHotRecItem();
@@ -70,7 +76,18 @@ class MainBloc implements BlocBase {
   }
 
   Future getHomeData(String labelId) {
+    getRecRepos(labelId);
     return getBanner(labelId);
+  }
+
+  Future getRecRepos(String labelId) {
+    ComReq _comReq = new ComReq(402);
+    wanRepository.getProjectList(data: _comReq.toJson()).then((list) {
+      if (list.length > 6) {
+        list = list.sublist(0, 6);
+      }
+      _recReposSink.add(UnmodifiableListView<ReposModel>(list));
+    });
   }
 
   Future getBanner(String labelId) {

@@ -52,6 +52,12 @@ class HomePage extends StatelessWidget {
                       );
                     }),
                 buildBanner(context, snapshot.data),
+                new StreamBuilder(
+                    stream: bloc.recReposStream,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<ReposModel>> snapshot) {
+                      return buildRepos(context, snapshot.data);
+                    })
               ],
             ),
           );
@@ -84,6 +90,33 @@ class HomePage extends StatelessWidget {
                   imageUrl: model.imagePath),
             );
           }).toList()),
+    );
+  }
+
+  Widget buildRepos(BuildContext context, List<ReposModel> list) {
+    if (ObjectUtil.isEmpty(list)) {
+      return new Container(
+        height: 0.0,
+      );
+    }
+    List<Widget> _children = list.map((model) {
+      return new ReposItem(
+        model,
+        isHome: true,
+      );
+    }).toList();
+    List<Widget> children = new List();
+    children.add(new HeaderItem(
+      leftIcon: Icons.book,
+      titleId: Ids.recRepos,
+      onTap: () {
+        // TODO
+      },
+    ));
+    children.addAll(_children);
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: children,
     );
   }
 }

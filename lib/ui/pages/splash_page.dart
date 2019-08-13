@@ -49,7 +49,9 @@ class SplashPageState extends State<SplashPage> {
       _status = 2;
     });
   }
-
+  void _goMain() {
+    RouteUtil.goMain(context);
+  }
   void _initBannerData() {
     for (int i = 0, length = _guideList.length; i < length; i++) {
       if (i == length - 1) {
@@ -67,8 +69,9 @@ class SplashPageState extends State<SplashPage> {
                 margin: EdgeInsets.only(bottom: 160.0),
                 child: new InkWell(
                   onTap: () {
-                    _scaffoldKey.currentState.showSnackBar(
-                        SnackBar(content: new Text('11111111111')));
+//                    _scaffoldKey.currentState.showSnackBar(
+//                        SnackBar(content: new Text('11111111111')));
+                    _goMain();
                   },
                   child: new CircleAvatar(
                     radius: 48,
@@ -105,9 +108,6 @@ class SplashPageState extends State<SplashPage> {
     }
   }
 
-  void _goMain() {
-    RouteUtil.goMain(context);
-  }
 
   void _doCountDown() {
     setState(() {

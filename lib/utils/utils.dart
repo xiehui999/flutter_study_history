@@ -7,14 +7,21 @@ class Utils {
   static String getImgPath(String name, {String format: 'png'}) {
     return 'assets/images/$name.$format';
   }
-  static int getLoadStatus(bool hasError ,List data){
-    if(hasError) return LoadStatus.fail;
-    if(data==null){
+
+  static int getLoadStatus(bool hasError, List data) {
+    if (hasError) return LoadStatus.fail;
+    if (data == null) {
       return LoadStatus.loading;
-    }else if(data.isNotEmpty){
+    } else if (data.isNotEmpty) {
       return LoadStatus.empty;
-    }else {
+    } else {
       return LoadStatus.success;
     }
+  }
+
+  static String getTimeLine(BuildContext context, int timeMills) {
+    return TimelineUtil.format(timeMills,
+        locale: Localizations.localeOf(context).languageCode,
+        dayFormat: DayFormat.Common);
   }
 }
