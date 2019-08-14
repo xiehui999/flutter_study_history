@@ -37,11 +37,30 @@ class WanRepository {
     return list;
   }
 
-  Future<List<ReposModel>> getWxArticleList({int id, int page:1, data}) async {
+  Future<List<ReposModel>> getWxArticleList({int id, int page: 1, data}) async {
     BaseResp<Map<String, dynamic>> baseResp = await DioUtil().request(
         Method.get,
         WanAndroidApi.getPath(
             path: WanAndroidApi.WXARTICLE_LIST + '/${id}', page: page));
+    List<ReposModel> list;
+    if (baseResp.code != Constant.status_success) {
+      return new Future.error(baseResp.msg);
+    }
+    if (baseResp.data != null) {
+      ComData comData = ComData.fromJson(baseResp.data);
+      list = comData.datas.map((value) {
+        return ReposModel.fromJson(value);
+      }).toList();
+    }
+    return list;
+  }
+
+  Future<List<ReposModel>> getArticleListProject(int page) async {
+    BaseResp<Map<String, dynamic>> baseResp = await DioUtil()
+        .request<Map<String, dynamic>>(
+            Method.get,
+            WanAndroidApi.getPath(
+                path: WanAndroidApi.ARTICLE_LISTPROJECT, page: page));
     List<ReposModel> list;
     if (baseResp.code != Constant.status_success) {
       return new Future.error(baseResp.msg);

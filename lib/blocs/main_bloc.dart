@@ -13,7 +13,7 @@ class MainBloc implements BlocBase {
 
   BehaviorSubject<StatusEvent> _homeEvent = BehaviorSubject<StatusEvent>();
 
-  Sink<StatusEvent> get homeEvebtSink => _homeEvent.sink;
+  Sink<StatusEvent> get homeEventSink => _homeEvent.sink;
 
   Stream<StatusEvent> get homeEventStream =>
       _homeEvent.stream.asBroadcastStream();
@@ -45,6 +45,20 @@ class MainBloc implements BlocBase {
 
   Stream<List<ComModel>> get recListStream =>
       _recList.stream.asBroadcastStream();
+
+  ///**项目页面相关开始**/
+
+  BehaviorSubject<List<ReposModel>> _repos =
+      BehaviorSubject<List<ReposModel>>();
+
+  Sink<List<ReposModel>> get _reposSink => _repos.sink;
+
+  Stream<List<ReposModel>> get reposStream => _repos.stream;
+  List<ReposModel> _reposList;
+  int _reposPage = 0;
+
+  ///**项目页面相关结束**/
+
   WanRepository wanRepository = new WanRepository();
 
   HttpUtils httpUtils = new HttpUtils();
@@ -61,20 +75,35 @@ class MainBloc implements BlocBase {
     switch (labelId) {
       case Ids.titleHome:
         return getHomeData(labelId);
+        break;
+      case Ids.titleRepos:
+        return getArticleListProject(labelId, page);
+        break;
     }
     return null;
   }
 
   @override
   Future onLoadMore({String labelId}) {
-    return null;
+    int _page = 0;
+    switch (labelId) {
+      case Ids.titleRepos:
+        _page = ++_reposPage;
+        break;
+    }
+    return getData(labelId: labelId, page: _page);
   }
 
   @override
   Future onRefresh({String labelId}) {
+    print('onRefresh');
+    print(labelId);
     switch (labelId) {
       case Ids.titleHome:
         getHotRecItem();
+        break;
+      case Ids.recRepos:
+        _reposPage = 0;
         break;
     }
     return getData(labelId: labelId, page: 0);
@@ -113,6 +142,30 @@ class MainBloc implements BlocBase {
   Future getBanner(String labelId) {
     return wanRepository.getBanner().then((list) {
       _bannerSink.add(UnmodifiableListView<BannerModel>(list));
+    });
+  }
+
+  Future getArticleListProject(String labelId, int page) {
+    return wanRepository.getArticleListProject(page).then((list) {
+      if (_reposList == null) {
+        _reposList = new List();
+      }
+      if (page == 0) {
+        _reposList.clear();
+      }
+      _reposList.addAll(list);
+      _reposSink.add(UnmodifiableListView<ReposModel>(_reposList));
+      homeEventSink.add(new StatusEvent(
+          labelId,
+          ObjectUtil.isEmpty(list)
+              ? RefreshStatus.noMore
+              : RefreshStatus.idle));
+    }).catchError((err) {
+      if (ObjectUtil.isEmpty(_reposList)) {
+        _repos.sink.addError("error");
+      }
+      _reposPage--;
+      homeEventSink.add(new StatusEvent(labelId, RefreshStatus.failed));
     });
   }
 }

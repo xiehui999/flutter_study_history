@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_study_history/common/component_index.dart';
 import 'package:flutter_study_history/ui/pages/page_index.dart';
+
 class _Page {
   final String labelId;
 
@@ -44,7 +45,14 @@ class TabBarViewLayout extends StatelessWidget {
     String labelId = page.labelId;
     switch (labelId) {
       case Ids.titleHome:
-        return new HomePage(labelId: page.labelId,);
+        return new HomePage(
+          labelId: page.labelId,
+        );
+        break;
+      case Ids.titleRepos:
+        return ReposPage(
+          labelId: labelId,
+        );
         break;
       default:
         return Container(child: new Text('默认页面'));
