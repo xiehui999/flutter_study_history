@@ -59,6 +59,17 @@ class MainBloc implements BlocBase {
 
   ///**项目页面相关结束**/
 
+  ///动态页面开始
+  BehaviorSubject<List<ReposModel>> _events =
+      BehaviorSubject<List<ReposModel>>();
+
+  Sink<List<ReposModel>> get _eventSink => _events.sink;
+
+  Stream<List<ReposModel>> get eventsStream => _events.stream;
+  int _eventsPage = 0;
+  List<ReposModel> _eventsList;
+
+  ///动态页面结束
   WanRepository wanRepository = new WanRepository();
 
   HttpUtils httpUtils = new HttpUtils();
@@ -79,6 +90,9 @@ class MainBloc implements BlocBase {
       case Ids.titleRepos:
         return getArticleListProject(labelId, page);
         break;
+      case Ids.titleEvents:
+        return getArticleList(labelId, page);
+        break;
     }
     return null;
   }
@@ -90,12 +104,15 @@ class MainBloc implements BlocBase {
       case Ids.titleRepos:
         _page = ++_reposPage;
         break;
+      case Ids.titleEvents:
+        _page = ++_eventsPage;
+        break;
     }
     return getData(labelId: labelId, page: _page);
   }
 
   @override
-  Future onRefresh({String labelId}) {
+  Future onRefresh({String labelId, bool isReload}) {
     print('onRefresh');
     print(labelId);
     switch (labelId) {
@@ -104,6 +121,9 @@ class MainBloc implements BlocBase {
         break;
       case Ids.recRepos:
         _reposPage = 0;
+        break;
+      case Ids.titleEvents:
+        _eventsPage = 0;
         break;
     }
     return getData(labelId: labelId, page: 0);
@@ -165,6 +185,30 @@ class MainBloc implements BlocBase {
         _repos.sink.addError("error");
       }
       _reposPage--;
+      homeEventSink.add(new StatusEvent(labelId, RefreshStatus.failed));
+    });
+  }
+
+  Future getArticleList(String labelId, int page) {
+    return wanRepository.getArticleList(page: page).then((list) {
+      if (_eventsList == null) {
+        _eventsList = new List();
+      }
+      if (page == 0) {
+        _eventsList.clear();
+      }
+      _eventsList.addAll(list);
+      _eventSink.add(UnmodifiableListView<ReposModel>(_eventsList));
+      homeEventSink.add(new StatusEvent(
+          labelId,
+          ObjectUtil.isEmpty(list)
+              ? RefreshStatus.noMore
+              : RefreshStatus.idle));
+    }).catchError((onError) {
+      if (ObjectUtil.isEmpty(_eventsList)) {
+        _events.sink.addError("error");
+      }
+      _eventsPage--;
       homeEventSink.add(new StatusEvent(labelId, RefreshStatus.failed));
     });
   }
