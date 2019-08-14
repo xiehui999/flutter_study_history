@@ -57,6 +57,12 @@ class HomePage extends StatelessWidget {
                     builder: (BuildContext context,
                         AsyncSnapshot<List<ReposModel>> snapshot) {
                       return buildRepos(context, snapshot.data);
+                    }),
+                new StreamBuilder(
+                    stream: bloc.recWxArticleStream,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<ReposModel>> snapshot) {
+                      return buildWxArticle(context, snapshot.data);
                     })
               ],
             ),
@@ -115,6 +121,35 @@ class HomePage extends StatelessWidget {
     ));
     children.addAll(_children);
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: children,
+    );
+  }
+
+  Widget buildWxArticle(BuildContext context, List<ReposModel> list) {
+    if (ObjectUtil.isEmpty(list)) {
+      return Container(
+        height: 0,
+      );
+    }
+    List<Widget> _children = list.map((model) {
+      return new ArticleItem(
+        isHome: true,
+        model: model,
+      );
+    }).toList();
+
+    List<Widget> children = new List();
+    children.add(new HeaderItem(
+      titleColor: Colors.green,
+      leftIcon: Icons.library_books,
+      titleId: Ids.recWxArticle,
+      onTap: () {
+        //TODO
+      },
+    ));
+    children.addAll(_children);
+    return new Column(
       mainAxisSize: MainAxisSize.min,
       children: children,
     );
