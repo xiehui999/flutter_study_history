@@ -19,6 +19,17 @@ class Utils {
       return LoadStatus.success;
     }
   }
+  static Color getChipBgColor(String name) {
+    String pinyin = PinyinHelper.getFirstWordPinyin(name);
+    pinyin = pinyin.substring(0, 1).toUpperCase();
+    return nameToColor(pinyin);
+  }
+  static Color nameToColor(String name) {
+    // assert(name.length > 1);
+    final int hash = name.hashCode & 0xffff;
+    final double hue = (360.0 * hash / (1 << 15)) % 360.0;
+    return HSVColor.fromAHSV(1.0, hue, 0.4, 0.90).toColor();
+  }
 
   static String getPinyin(String str) {
     return PinyinHelper.getShortPinyin(str).substring(0, 1).toUpperCase();

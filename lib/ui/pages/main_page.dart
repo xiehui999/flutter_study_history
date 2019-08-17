@@ -59,6 +59,11 @@ class TabBarViewLayout extends StatelessWidget {
           labelId: labelId,
         );
         break;
+      case Ids.titleSystem:
+        return SystemPage(
+          labelId: labelId,
+        );
+        break;
       default:
         return Container(child: new Text('默认页面'));
         break;

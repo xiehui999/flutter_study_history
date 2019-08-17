@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'package:flutter_study_history/common/component_index.dart';
 import 'package:flutter_study_history/data/repository/wan_repository.dart';
+import 'package:azlistview/azlistview.dart';
 
 class MainBloc implements BlocBase {
   //首页banner相关
@@ -59,7 +60,7 @@ class MainBloc implements BlocBase {
 
   ///**项目页面相关结束**/
 
-  ///动态页面开始
+  ///***动态页面开始***/
   BehaviorSubject<List<ReposModel>> _events =
       BehaviorSubject<List<ReposModel>>();
 
@@ -69,7 +70,19 @@ class MainBloc implements BlocBase {
   int _eventsPage = 0;
   List<ReposModel> _eventsList;
 
-  ///动态页面结束
+  ///动态页面结束*///
+
+  ///****体系开始****/
+
+  BehaviorSubject<List<TreeModel>> _tree = BehaviorSubject<List<TreeModel>>();
+
+  Sink<List<TreeModel>> get _treeSink => _tree.sink;
+
+  Stream<List<TreeModel>> get treeStream => _tree.stream;
+  List<TreeModel> _treeList;
+
+  ///****体系结束****/
+
   WanRepository wanRepository = new WanRepository();
 
   HttpUtils httpUtils = new HttpUtils();
@@ -92,6 +105,9 @@ class MainBloc implements BlocBase {
         break;
       case Ids.titleEvents:
         return getArticleList(labelId, page);
+        break;
+      case Ids.titleSystem:
+        return getTree(labelId);
         break;
     }
     return null;
@@ -124,6 +140,8 @@ class MainBloc implements BlocBase {
         break;
       case Ids.titleEvents:
         _eventsPage = 0;
+        break;
+      case Ids.titleSystem:
         break;
     }
     return getData(labelId: labelId, page: 0);
@@ -210,6 +228,36 @@ class MainBloc implements BlocBase {
       }
       _eventsPage--;
       homeEventSink.add(new StatusEvent(labelId, RefreshStatus.failed));
+    });
+  }
+
+  Future getTree(String labelId) {
+    return wanRepository.getTree().then((list) {
+      if (_treeList == null) {
+        _treeList = new List();
+      }
+      for (int i = 0, length = list.length; i < length; i++) {
+        String tag = Utils.getPinyin(list[i].name);
+        if (RegExp("[A-Z]").hasMatch(tag)) {
+          list[i].tagIndex = tag;
+        } else {
+          list[i].tagIndex = "#";
+        }
+      }
+      SuspensionUtil.sortListBySuspensionTag(list);
+      _treeList.clear();
+      _treeList.addAll(list);
+      _treeSink.add(UnmodifiableListView<TreeModel>(_treeList));
+      homeEventSink.add(new StatusEvent(
+          labelId,
+          ObjectUtil.isEmpty(list)
+              ? RefreshStatus.noMore
+              : RefreshStatus.idle));
+    }).catchError((_) {
+      if (ObjectUtil.isEmpty(_treeList)) {
+        _tree.sink.addError("error");
+        homeEventSink.add(new StatusEvent(labelId, RefreshStatus.failed));
+      }
     });
   }
 }
