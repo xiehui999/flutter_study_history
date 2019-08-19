@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'model.dart';
+import 'dot_painter.dart';
 
 typedef LikeCallBack = void Function(bool isLike);
 
@@ -63,6 +64,28 @@ class LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
       children: <Widget>[
         CustomPaint(
           size: Size(widget.width, widget.width),
+          painter: DotPainter(
+            currentProgress: dots.value,
+            color1: widget.dotColor.dotPrimaryColor,
+            color2: widget.dotColor.dotSecondaryColor,
+            color3: widget.dotColor.dotThirdColorReal,
+            color4: widget.dotColor.dotLastColorReal,
+          ),
+        ),
+        new Container(
+          width: widget.width,
+          height: widget.width,
+          alignment: Alignment.center,
+          child: Transform.scale(
+              scale: isLiked ? scale.value : 1.0,
+              child: GestureDetector(
+                child: Icon(
+                  widget.icon.icon,
+                  color: isLiked ? widget.icon.iconColor : Colors.grey,
+                  size: widget.width * 0.4,
+                ),
+                onTap: _onTap,
+              )),
         )
       ],
     );
@@ -83,5 +106,17 @@ class LikeButtonState extends State<LikeButton> with TickerProviderStateMixin {
     dots = new Tween<double>(begin: 0.0, end: 1.0).animate(new CurvedAnimation(
         parent: _controller,
         curve: new Interval(0.1, 1.0, curve: Curves.decelerate)));
+  }
+
+  void _onTap() {
+    if (_controller.isAnimating) return;
+    isLiked = !isLiked;
+    if (isLiked) {
+      _controller.reset();
+      _controller.forward();
+    } else {
+      setState(() {});
+    }
+    if (widget.onIconClicked != null) widget.onIconClicked(isLiked);
   }
 }

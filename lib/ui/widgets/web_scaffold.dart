@@ -27,7 +27,9 @@ class WebScaffoldState extends State<WebScaffold> {
           overflow: TextOverflow.ellipsis,
         ),
         centerTitle: true,
-        actions: <Widget>[],
+        actions: <Widget>[
+          LikeButton(width: 56.0,duration: Duration(milliseconds: 500),)
+        ],
       ),
       body: new WebView(
         initialUrl: widget.url,

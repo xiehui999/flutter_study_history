@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as math;
+import 'like_button_util.dart';
 
 class DotPainter extends CustomPainter {
   final int dotCount;
@@ -44,11 +46,23 @@ class DotPainter extends CustomPainter {
       maxInnerDotsRadius = size.width * 0.5 - maxDotSize * 2;
       isFirst = false;
     }
+    _drawOuterDotsFrame(canvas);
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
     // TODO: implement shouldRepaint
-    return null;
+    return true;
+  }
+
+  void _drawOuterDotsFrame(Canvas canvas) {
+    for (int i = 0; i < dotCount; i++) {
+      double cX = centerX +
+          currentRadius1 * math.cos(i * degToRad(outerDotsPositionAngle));
+      double cY = centerY +
+          currentRadius1 * math.sin(i * degToRad(outerDotsPositionAngle));
+      canvas.drawCircle(Offset(cX, cY), currentDotSize1,
+          circlePaints[(i + 1) % circlePaints.length]);
+    }
   }
 }
