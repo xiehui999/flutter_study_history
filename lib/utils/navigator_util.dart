@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_study_history/common/component_index.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/cupertino.dart';
 
 class NavigatorUtil {
   static void pushWeb(BuildContext context,
@@ -8,6 +9,15 @@ class NavigatorUtil {
     if (context == null || ObjectUtil.isEmpty(url)) return;
     if (url.endsWith(".apk")) {
       launchInBrowser(url, title: title ?? titleId);
+    } else {
+      Navigator.push(
+          context,
+          new CupertinoPageRoute(
+              builder: (ctx) => new WebScaffold(
+                    title: title,
+                    titleId: titleId,
+                    url: url,
+                  )));
     }
   }
 

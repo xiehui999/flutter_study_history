@@ -13,7 +13,7 @@ class ArticleItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return new InkWell(
       onTap: () {
-        //Todo
+        NavigatorUtil.pushWeb(context,title: model.title,url: model.link,isHome: isHome);
       },
       child: new Container(
         padding: EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 10),

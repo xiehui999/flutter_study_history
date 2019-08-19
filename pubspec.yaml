@@ -47,6 +47,12 @@ dependencies:
   lpinyin: ^1.0.7
   # Flutter 城市列表 https://github.com/flutterchina/azlistview
   azlistview: ^0.1.2  #latest version
+
+
+  # webview_flutter
+  # https://github.com/flutter/plugins/tree/master/packages/webview_flutter
+  webview_flutter: ^0.3.13
+
   base_library:
     path: ../flutter_study_history/base_library
 
