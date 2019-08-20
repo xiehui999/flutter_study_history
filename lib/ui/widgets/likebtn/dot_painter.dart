@@ -46,12 +46,16 @@ class DotPainter extends CustomPainter {
       maxInnerDotsRadius = size.width * 0.5 - maxDotSize * 2;
       isFirst = false;
     }
+    _updateOuterDotsPosition();
+    _updateInnerDotsPosition();
+    _updateDotsPaints();
+
     _drawOuterDotsFrame(canvas);
+    _drawInnerDotsFrame(canvas);
   }
 
   @override
   bool shouldRepaint(CustomPainter oldDelegate) {
-    // TODO: implement shouldRepaint
     return true;
   }
 
@@ -63,6 +67,87 @@ class DotPainter extends CustomPainter {
           currentRadius1 * math.sin(i * degToRad(outerDotsPositionAngle));
       canvas.drawCircle(Offset(cX, cY), currentDotSize1,
           circlePaints[(i + 1) % circlePaints.length]);
+    }
+  }
+
+  void _updateOuterDotsPosition() {
+    print(currentProgress);
+    if (currentProgress < 0.3) {
+      currentRadius1 = mapValueFromRangeToRange(
+          currentProgress, 0.0, 0.3, 0.0, maxOuterDotsRadius * 0.8);
+    } else {
+      currentRadius1 = mapValueFromRangeToRange(currentProgress, 0.3, 1.0,
+          0.8 * maxOuterDotsRadius, maxOuterDotsRadius);
+    }
+    if (currentProgress == 0) {
+      currentDotSize1 = 0;
+    } else if (currentProgress < 0.7) {
+      currentDotSize1 = maxDotSize;
+    } else {
+      currentDotSize1 =
+          mapValueFromRangeToRange(currentProgress, 0.7, 1.0, maxDotSize, 0.0);
+    }
+  }
+
+  void _updateInnerDotsPosition() {
+    if (currentProgress < 0.3) {
+      currentRadius2 = mapValueFromRangeToRange(
+          currentProgress, 0.0, 0.3, 0.0, maxInnerDotsRadius);
+    } else {
+      currentRadius2 = maxInnerDotsRadius;
+    }
+    if (currentProgress == 0) {
+      currentDotSize2 = 0;
+    } else if (currentProgress < 0.2) {
+      currentDotSize2 = maxDotSize;
+    } else if (currentProgress < 0.5) {
+      currentDotSize2 = mapValueFromRangeToRange(
+          currentProgress, 0.2, 0.5, maxDotSize, 0.3 * maxDotSize);
+    } else {
+      currentDotSize2 = mapValueFromRangeToRange(
+          currentProgress, 0.5, 1.0, maxDotSize * 0.3, 0.0);
+    }
+  }
+
+  void _drawInnerDotsFrame(Canvas canvas) {
+    for (int i = 0; i < dotCount; i++) {
+      double cX = centerX +
+          currentRadius2 *
+              math.cos((i * degToRad(outerDotsPositionAngle - 10)));
+      double cY = centerY +
+          currentRadius2 *
+              math.sin((i * degToRad(outerDotsPositionAngle - 10)));
+      canvas.drawCircle(Offset(cX, cY), currentDotSize2,
+          circlePaints[(i + 1) % circlePaints.length]);
+    }
+  }
+
+  void _updateDotsPaints() {
+    double progress = clamp(currentProgress, 0.6, 1.0);
+    int alpha =
+    mapValueFromRangeToRange(progress, 0.6, 1.0, 255.0, 0.0).toInt();
+    if (currentProgress < 0.5) {
+      double progress =
+      mapValueFromRangeToRange(currentProgress, 0.0, 0.5, 0.0, 1.0);
+      circlePaints[0]
+        ..color = Color.lerp(color1, color2, progress).withAlpha(alpha);
+      circlePaints[1]
+        ..color = Color.lerp(color2, color3, progress).withAlpha(alpha);
+      circlePaints[2]
+        ..color = Color.lerp(color3, color4, progress).withAlpha(alpha);
+      circlePaints[3]
+        ..color = Color.lerp(color4, color1, progress).withAlpha(alpha);
+    } else {
+      double progress =
+      mapValueFromRangeToRange(currentProgress, 0.5, 1.0, 0.0, 1.0);
+      circlePaints[0]
+        ..color = Color.lerp(color2, color3, progress).withAlpha(alpha);
+      circlePaints[1]
+        ..color = Color.lerp(color3, color4, progress).withAlpha(alpha);
+      circlePaints[2]
+        ..color = Color.lerp(color4, color1, progress).withAlpha(alpha);
+      circlePaints[3]
+        ..color = Color.lerp(color1, color2, progress).withAlpha(alpha);
     }
   }
 }
