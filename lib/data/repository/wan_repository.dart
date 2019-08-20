@@ -106,4 +106,19 @@ class WanRepository {
     }
     return treeList;
   }
+
+  Future<List<TreeModel>> getProjectTree() async {
+    BaseResp<List> baseResp = await DioUtil().request(
+        Method.get, WanAndroidApi.getPath(path: WanAndroidApi.PROJECT_TREE));
+    List<TreeModel> treeList;
+    if (baseResp.code != Constant.status_success) {
+      return new Future.error(baseResp.msg);
+    }
+    if (baseResp.data != null) {
+      treeList = baseResp.data.map((value) {
+        return TreeModel.fromJson(value);
+      }).toList();
+    }
+    return treeList;
+  }
 }
