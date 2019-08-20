@@ -12,7 +12,11 @@ class ReposItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new InkWell(
-      onTap: () {},
+      onTap: () {
+        print(model);
+        NavigatorUtil.pushWeb(context,
+            title: model.title, url: model.link, isHome: isHome);
+      },
       child: new Container(
         height: 160.0,
         padding: EdgeInsets.only(left: 16, top: 16, right: 16, bottom: 10),

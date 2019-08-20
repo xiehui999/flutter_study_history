@@ -87,7 +87,8 @@ class HomePage extends StatelessWidget {
           children: list.map((model) {
             return InkWell(
               onTap: () {
-                // TODO 跳转
+                NavigatorUtil.pushWeb(context,
+                    title: model.title, url: model.url);
               },
               child: new CachedNetworkImage(
                   fit: BoxFit.fill,
