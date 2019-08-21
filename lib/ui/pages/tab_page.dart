@@ -18,6 +18,8 @@ class TabPage extends StatefulWidget {
 }
 
 class TabPageState extends State<TabPage> {
+  List<BlocProvider<ComListBloc>> _children = new List();
+
   @override
   Widget build(BuildContext context) {
     final TabBloc bloc = BlocProvider.of<TabBloc>(context);
@@ -41,6 +43,13 @@ class TabPageState extends State<TabPage> {
               });
               return new ProgressView();
             }
+            _children = snapshot.data
+                .map((TreeModel model) {
+                  return new BlocProvider<ComListBloc>(
+                      child: null, bloc: new ComListBloc());
+                })
+                .cast<BlocProvider<ComListBloc>>()
+                .toList();
             return new DefaultTabController(
                 length: snapshot.data == null ? 0 : snapshot.data.length,
                 child: new Column(
@@ -59,7 +68,8 @@ class TabPageState extends State<TabPage> {
                                     ))
                                 ?.toList()),
                       ),
-                    )
+                    ),
+                    new Expanded(child: new TabBarView(children: snapshot.data.map((model)=>new Text(model.toString())).toList()))
                   ],
                 ));
           }),
