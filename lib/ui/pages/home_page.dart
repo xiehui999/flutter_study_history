@@ -147,7 +147,8 @@ class HomePage extends StatelessWidget {
       leftIcon: Icons.library_books,
       titleId: Ids.recWxArticle,
       onTap: () {
-        //TODO
+        NavigatorUtil.pushTabPage(context,
+            labelId: Ids.titleWxArticleTree, titleId: Ids.titleWxArticleTree);
       },
     ));
     children.addAll(_children);

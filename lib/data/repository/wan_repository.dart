@@ -38,10 +38,10 @@ class WanRepository {
   }
 
   Future<List<ReposModel>> getWxArticleList({int id, int page: 1, data}) async {
-    BaseResp<Map<String, dynamic>> baseResp = await DioUtil().request(
+    BaseResp<Map<String, dynamic>> baseResp = await DioUtil().request<Map<String, dynamic>>(
         Method.get,
         WanAndroidApi.getPath(
-            path: WanAndroidApi.WXARTICLE_LIST + '/${id}', page: page));
+            path: WanAndroidApi.WXARTICLE_LIST + '/${id}', page: page,),data: data);
     List<ReposModel> list;
     if (baseResp.code != Constant.status_success) {
       return new Future.error(baseResp.msg);
@@ -53,6 +53,21 @@ class WanRepository {
       }).toList();
     }
     return list;
+  }
+
+  Future<List<TreeModel>> getWxArticleChapters() async {
+    BaseResp<List> baseResp = await DioUtil().request<List>(Method.get,
+        WanAndroidApi.getPath(path: WanAndroidApi.WXARTICLE_CHAPTERS));
+    List<TreeModel> treeList;
+    if (baseResp.code != Constant.status_success) {
+      return new Future.error(baseResp.msg);
+    }
+    if (baseResp.data != null) {
+      treeList = baseResp.data.map((value) {
+        return TreeModel.fromJson(value);
+      }).toList();
+    }
+    return treeList;
   }
 
   Future<List<ReposModel>> getArticleListProject(int page) async {

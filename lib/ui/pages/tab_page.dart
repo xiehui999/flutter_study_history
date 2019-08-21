@@ -46,7 +46,11 @@ class TabPageState extends State<TabPage> {
             _children = snapshot.data
                 .map((TreeModel model) {
                   return new BlocProvider<ComListBloc>(
-                      child: null, bloc: new ComListBloc());
+                      child: new ComListPage(
+                        labelId: widget.labelId,
+                        cid: model.id,
+                      ),
+                      bloc: new ComListBloc());
                 })
                 .cast<BlocProvider<ComListBloc>>()
                 .toList();
@@ -69,7 +73,7 @@ class TabPageState extends State<TabPage> {
                                 ?.toList()),
                       ),
                     ),
-                    new Expanded(child: new TabBarView(children: snapshot.data.map((model)=>new Text(model.toString())).toList()))
+                    new Expanded(child: new TabBarView(children: _children))
                   ],
                 ));
           }),

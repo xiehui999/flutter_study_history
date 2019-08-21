@@ -4,7 +4,7 @@ import 'dart:collection';
 
 class ComListBloc implements BlocBase {
   BehaviorSubject<List<ReposModel>> _comListData =
-  BehaviorSubject<List<ReposModel>>();
+      BehaviorSubject<List<ReposModel>>();
 
   Sink<List<ReposModel>> get _comListSink => _comListData.sink;
 
@@ -32,27 +32,37 @@ class ComListBloc implements BlocBase {
       case Ids.titleReposTree:
         return getRepos(labelId, cid, page);
         break;
+      case Ids.titleWxArticleTree:
+        return getWxArticle(labelId, cid, page);
+        break;
+      default:
+        return Future.delayed(new Duration(seconds: 1));
+        break;
     }
-    return null;
   }
 
   @override
-  Future onLoadMore({String labelId}) {
-    // TODO: implement onLoadMore
-    return null;
+  Future onLoadMore({String labelId, int cid}) {
+    int _page = 0;
+    _page = ++_comListPage;
+    return getData(labelId: labelId, cid: cid, page: _page);
   }
 
   @override
   Future onRefresh({String labelId, int cid}) {
+
     switch (labelId) {
       case Ids.titleReposTree:
+        _comListPage = 1;
+        break;
+      case Ids.titleWxArticleTree:
         _comListPage = 1;
         break;
     }
     return getData(labelId: labelId, page: _comListPage, cid: cid);
   }
 
-  Future getRepos(String labelId, int cid, int page) {
+  Future getRepos(String labelId, int cid, int page) async {
     ComReq _comReq = new ComReq(cid);
     return wanRepository
         .getProjectList(page: page, data: _comReq.toJson())
@@ -65,6 +75,25 @@ class ComListBloc implements BlocBase {
       }
       comList.addAll(list);
       _comListSink.add(UnmodifiableListView<ReposModel>(list));
+      _comListEventSink.add(new StatusEvent(labelId,
+          ObjectUtil.isEmpty(list) ? RefreshStatus.noMore : RefreshStatus.idle,
+          cid: cid));
+    }).catchError((_) {
+      _comListPage--;
+      _comListEventSink.add(new StatusEvent(labelId, RefreshStatus.failed));
+    });
+  }
+
+  Future getWxArticle(String labelId, int cid, int page) async {
+    return wanRepository.getWxArticleList(id: cid, page: page).then((list) {
+      if (comList == null) {
+        comList = new List();
+      }
+      if (page == 1) {
+        comList.clear();
+      }
+      comList.addAll(list);
+      _comListSink.add(UnmodifiableListView<ReposModel>(comList));
       _comListEventSink.add(new StatusEvent(labelId,
           ObjectUtil.isEmpty(list) ? RefreshStatus.noMore : RefreshStatus.idle,
           cid: cid));

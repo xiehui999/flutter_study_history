@@ -23,6 +23,9 @@ class TabBloc implements BlocBase {
       case Ids.titleReposTree:
         return getProjectTree(labelId);
         break;
+      case Ids.titleWxArticleTree:
+        return getWxArticleTree(labelId);
+        break;
       default:
         return Future.delayed(new Duration(seconds: 1));
         break;
@@ -47,6 +50,12 @@ class TabBloc implements BlocBase {
 
   Future getProjectTree(String labelId) {
     return wanRepository.getProjectTree().then((list) {
+      _tabTreeSink.add(UnmodifiableListView<TreeModel>(list));
+    });
+  }
+
+  Future getWxArticleTree(String labelId) {
+    return wanRepository.getWxArticleChapters().then((list) {
       _tabTreeSink.add(UnmodifiableListView<TreeModel>(list));
     });
   }
