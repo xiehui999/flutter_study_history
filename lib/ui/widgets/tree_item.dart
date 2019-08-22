@@ -20,7 +20,7 @@ class TreeItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<Widget> chips = model.children.map((TreeModel _model) {
       return Chip(
-        elevation: 3,
+          elevation: 3,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           backgroundColor: Utils.getChipBgColor(_model.name),
           label: new Text(
@@ -30,7 +30,10 @@ class TreeItem extends StatelessWidget {
     }).toList();
 
     return new InkWell(
-      onTap: () {},
+      onTap: () {
+        NavigatorUtil.pushTabPage(context,
+            labelId: Ids.titleSystemTree, title: model.name, treeModel: model);
+      },
       child: new _ChipsTile(
         label: model.name,
         children: chips,

@@ -35,6 +35,9 @@ class ComListBloc implements BlocBase {
       case Ids.titleWxArticleTree:
         return getWxArticle(labelId, cid, page);
         break;
+      case Ids.titleSystemTree:
+        return getArticle(labelId, cid, page);
+        break;
       default:
         return Future.delayed(new Duration(seconds: 1));
         break;
@@ -50,13 +53,15 @@ class ComListBloc implements BlocBase {
 
   @override
   Future onRefresh({String labelId, int cid}) {
-
     switch (labelId) {
       case Ids.titleReposTree:
         _comListPage = 1;
         break;
       case Ids.titleWxArticleTree:
         _comListPage = 1;
+        break;
+      case Ids.titleSystemTree:
+        _comListPage = 0;
         break;
     }
     return getData(labelId: labelId, page: _comListPage, cid: cid);
@@ -90,6 +95,28 @@ class ComListBloc implements BlocBase {
         comList = new List();
       }
       if (page == 1) {
+        comList.clear();
+      }
+      comList.addAll(list);
+      _comListSink.add(UnmodifiableListView<ReposModel>(comList));
+      _comListEventSink.add(new StatusEvent(labelId,
+          ObjectUtil.isEmpty(list) ? RefreshStatus.noMore : RefreshStatus.idle,
+          cid: cid));
+    }).catchError((_) {
+      _comListPage--;
+      _comListEventSink.add(new StatusEvent(labelId, RefreshStatus.failed));
+    });
+  }
+
+  Future getArticle(String labelId, int cid, int page) {
+    ComReq _comReq = new ComReq(cid);
+    return wanRepository
+        .getArticleList(page: page, data: _comReq.toJson())
+        .then((list) {
+      if (comList == null) {
+        comList = new List();
+      }
+      if (page == 0) {
         comList.clear();
       }
       comList.addAll(list);
