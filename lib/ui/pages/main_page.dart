@@ -36,6 +36,7 @@ class MainPage extends StatelessWidget {
             title: TabLayout(),
           ),
           body: new TabBarViewLayout(),
+          drawer: new Drawer(child: new MainLeftPage(),),
         ));
   }
 }

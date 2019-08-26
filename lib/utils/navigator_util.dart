@@ -5,6 +5,17 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_study_history/ui/pages/tab_page.dart';
 
 class NavigatorUtil {
+  static void pushPage(BuildContext context, Widget page,
+      {String pageName, bool needLogin = false}) {
+    if (context == null || page == null) return;
+    if (needLogin && !Util.isLogin()) {
+      pushPage(context, page);
+      return;
+    }
+    Navigator.push(
+        context, new CupertinoPageRoute<void>(builder: (ctx) => page));
+  }
+
   static void pushWeb(BuildContext context,
       {String title, String titleId, String url, bool isHome: false}) {
     if (context == null || ObjectUtil.isEmpty(url)) return;
