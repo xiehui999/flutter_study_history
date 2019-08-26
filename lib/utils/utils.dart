@@ -19,11 +19,13 @@ class Utils {
       return LoadStatus.success;
     }
   }
+
   static Color getChipBgColor(String name) {
     String pinyin = PinyinHelper.getFirstWordPinyin(name);
     pinyin = pinyin.substring(0, 1).toUpperCase();
     return nameToColor(pinyin);
   }
+
   static Color nameToColor(String name) {
     // assert(name.length > 1);
     final int hash = name.hashCode & 0xffff;
@@ -48,5 +50,12 @@ class Utils {
     return TimelineUtil.format(timeMills,
         locale: Localizations.localeOf(context).languageCode,
         dayFormat: DayFormat.Common);
+  }
+
+  static bool isNeedLogin(String pageId) {
+    if (pageId == Ids.titleCollection) {
+      return true;
+    }
+    return false;
   }
 }

@@ -28,7 +28,7 @@ class MainLeftPageState extends State<MainLeftPage> {
   void initState() {
     super.initState();
     _pageInfo.add(PageInfo(Ids.titleCollection, Icons.collections, null));
-    _pageInfo.add(PageInfo(Ids.titleSetting, Icons.settings, null));
+    _pageInfo.add(PageInfo(Ids.titleSetting, Icons.settings, SettingPage()));
     _pageInfo.add(PageInfo(Ids.titleAbout, Icons.info, null));
     _pageInfo.add(PageInfo(Ids.titleShare, Icons.share, null));
   }
@@ -121,8 +121,10 @@ class MainLeftPageState extends State<MainLeftPage> {
                       leading: new Icon(pageInfo.iconData),
                       title:
                           Text(IntlUtil.getString(context, pageInfo.titleId)),
-                      onTap: (){
-                        NavigatorUtil.pushPage(context,pageInfo.page);
+                      onTap: () {
+                        NavigatorUtil.pushPage(context, pageInfo.page,
+                            pageName: pageInfo.titleId,
+                            needLogin: Utils.isNeedLogin(pageInfo.titleId));
                       },
                     );
                   }))
