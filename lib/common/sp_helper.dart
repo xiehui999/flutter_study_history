@@ -38,7 +38,7 @@ class SpHelper {
         obj = SplashModel.fromJson(map);
         break;
       case LanguageModel:
-        obj = SplashModel.fromJson(map);
+        obj = LanguageModel.fromJson(map);
         break;
       case VersionModel:
         obj = VersionModel.fromJson(map);

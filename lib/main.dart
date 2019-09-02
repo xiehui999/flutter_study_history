@@ -25,6 +25,7 @@ class MyAppState extends State<MyApp> {
 //    setLocalizedSimpleValues(localizedSimpleValues);//配置简单多语言资源
     setLocalizedValues(localizedValues); //配置多语言资源
     _initAsync();
+    _initListener();
   }
 
   @override
@@ -87,6 +88,13 @@ class MyAppState extends State<MyApp> {
       if (themeColorMap[_colorKey] != null) {
         _themeColor = themeColorMap[_colorKey];
       }
+    });
+  }
+
+  void _initListener() {
+    final ApplicationBloc bloc=BlocProvider.of<ApplicationBloc>(context);
+    bloc.appEventStream.listen((value){
+      _loadLocale();
     });
   }
 }

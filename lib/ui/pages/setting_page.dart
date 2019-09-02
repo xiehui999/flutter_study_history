@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_study_history/common/component_index.dart';
+import 'package:flutter_study_history/ui/pages/page_index.dart';
 
 class SettingPage extends StatelessWidget {
   @override
@@ -32,7 +33,10 @@ class SettingPage extends StatelessWidget {
                 children: themeColorMap.keys.map((String key) {
                   Color color = themeColorMap[key];
                   return new InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      SpUtil.putString(Constant.key_theme_color, key);
+                      bloc.sendAppEvent(Constant.type_sys_update);
+                    },
                     child: new Container(
                       margin: EdgeInsets.all(5),
                       width: 36,
@@ -72,7 +76,9 @@ class SettingPage extends StatelessWidget {
                 Icon(Icons.keyboard_arrow_right)
               ],
             ),
-            onTap: () {},
+            onTap: () {
+              NavigatorUtil.pushPage(context, LanguagePage(),pageName: Ids.titleLanguage);
+            },
           )
         ],
       ),

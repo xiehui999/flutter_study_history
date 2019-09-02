@@ -7,3 +7,4 @@ export 'system_page.dart';
 export 'tab_page.dart';
 export 'main_let_page.dart';
 export 'setting_page.dart';
+export 'language_page.dart';
