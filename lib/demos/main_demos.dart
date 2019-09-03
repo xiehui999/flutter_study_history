@@ -25,7 +25,7 @@ class MainDemosPageState extends State<MainDemosPage> {
     super.initState();
     mItemList.add(new ItemModel('GitHub首页', null));
     mItemList.add(new ItemModel('汉字转拼音', new PinyinPage('汉字转拼音')));
-    mItemList.add(new ItemModel('城市列表', null));
+    mItemList.add(new ItemModel('城市列表', new CitySelectPage('城市列表')));
     mItemList.add(new ItemModel('Date Util', null));
     mItemList.add(new ItemModel('Regex Util', null));
     mItemList.add(new ItemModel('Widget Util', null));
