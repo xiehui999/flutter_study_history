@@ -150,7 +150,7 @@ class PinyinPageState extends State<PinyinPage> {
         _pinyinResult = ChineseHelper.convertToSimplifiedChinese(text);
         break;
       case TYPE_TRADITIONAL:
-        _pinyinResult = ChineseHelper.convertCharToTraditionalChinese(text);
+        _pinyinResult = ChineseHelper.convertToTraditionalChinese(text);
         break;
     }
   }
