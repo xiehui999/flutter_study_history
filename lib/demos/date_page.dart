@@ -91,7 +91,194 @@ class DatePageState extends State<DatePage> {
                             "NORMAL",
                             style: new TextStyle(
                                 fontSize: 12, color: Colors.grey[700]),
-                          )
+                          ),
+                          new Checkbox(
+                              value: (_dateFormat == DateFormat.NORMAL),
+                              onChanged: (value) {
+                                if (value) {
+                                  setState(() {
+                                    _dateFormat = DateFormat.NORMAL;
+                                    inputCheck(isZH
+                                        ? DateFormat.ZH_NORMAL
+                                        : _dateFormat);
+                                  });
+                                }
+                              })
+                        ],
+                      ),
+                    ),
+                    new Padding(
+                      padding: EdgeInsets.only(top: 16, left: 5, right: 5),
+                      child: new Column(
+                        children: <Widget>[
+                          new Text(
+                            "Y-M-D-H-M",
+                            style: new TextStyle(
+                                fontSize: 12, color: Colors.grey[700]),
+                          ),
+                          new Checkbox(
+                              value: (_dateFormat ==
+                                  DateFormat.YEAR_MONTH_DAY_HOUR_MINUTE),
+                              onChanged: (value) {
+                                if (value) {
+                                  setState(() {
+                                    _dateFormat =
+                                        DateFormat.YEAR_MONTH_DAY_HOUR_MINUTE;
+                                    inputCheck(isZH
+                                        ? DateFormat
+                                            .ZH_YEAR_MONTH_DAY_HOUR_MINUTE
+                                        : _dateFormat);
+                                  });
+                                }
+                              })
+                        ],
+                      ),
+                    ),
+                    new Padding(
+                      padding: EdgeInsets.only(top: 16, left: 5, right: 5),
+                      child: new Column(
+                        children: <Widget>[
+                          new Text(
+                            "Y-M-D",
+                            style: new TextStyle(
+                                fontSize: 14, color: Colors.grey[700]),
+                          ),
+                          new Checkbox(
+                              value: (_dateFormat == DateFormat.YEAR_MONTH_DAY),
+                              onChanged: (value) {
+                                if (value) {
+                                  setState(() {
+                                    _dateFormat = DateFormat.YEAR_MONTH_DAY;
+                                    inputCheck(isZH
+                                        ? DateFormat.ZH_YEAR_MONTH_DAY
+                                        : _dateFormat);
+                                  });
+                                }
+                              })
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+                new Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    new Padding(
+                      padding: EdgeInsets.only(top: 16, left: 5, right: 5),
+                      child: new Column(
+                        children: <Widget>[
+                          new Text(
+                            'Y-M',
+                            style: new TextStyle(
+                                fontSize: 14, color: Colors.grey[700]),
+                          ),
+                          new Checkbox(
+                              value: (_dateFormat == DateFormat.YEAR_MONTH),
+                              onChanged: (value) {
+                                if (value) {
+                                  setState(() {
+                                    _dateFormat = DateFormat.YEAR_MONTH;
+                                    inputCheck(isZH
+                                        ? DateFormat.ZH_YEAR_MONTH
+                                        : _dateFormat);
+                                  });
+                                }
+                              })
+                        ],
+                      ),
+                    ),
+                    new Padding(
+                      padding: const EdgeInsets.only(
+                          top: 16.0, left: 5.0, right: 5.0),
+                      child: new Column(
+                        children: <Widget>[
+                          new Text("M_D",
+                              style: new TextStyle(
+                                  fontSize: 12.0, color: Colors.grey[700])),
+                          new Checkbox(
+                              value: (_dateFormat == DateFormat.MONTH_DAY),
+                              onChanged: (value) {
+                                if (value) {
+                                  setState(() {
+                                    _dateFormat = DateFormat.MONTH_DAY;
+                                    inputCheck(isZH
+                                        ? DateFormat.ZH_MONTH_DAY
+                                        : _dateFormat);
+                                  });
+                                }
+                              })
+                        ],
+                      ),
+                    ),
+                    new Padding(
+                      padding: const EdgeInsets.only(
+                          top: 16.0, left: 5.0, right: 5.0),
+                      child: new Column(
+                        children: <Widget>[
+                          new Text("M_D_H_M",
+                              style: new TextStyle(
+                                  fontSize: 12.0, color: Colors.grey[700])),
+                          new Checkbox(
+                              value: (_dateFormat ==
+                                  DateFormat.MONTH_DAY_HOUR_MINUTE),
+                              onChanged: (value) {
+                                if (value) {
+                                  setState(() {
+                                    _dateFormat =
+                                        DateFormat.MONTH_DAY_HOUR_MINUTE;
+                                    inputCheck(isZH
+                                        ? DateFormat.ZH_MONTH_DAY_HOUR_MINUTE
+                                        : _dateFormat);
+                                  });
+                                }
+                              })
+                        ],
+                      ),
+                    ),
+                    new Padding(
+                      padding: const EdgeInsets.only(
+                          top: 16.0, left: 5.0, right: 5.0),
+                      child: new Column(
+                        children: <Widget>[
+                          new Text("H_M_S",
+                              style: new TextStyle(
+                                  fontSize: 12.0, color: Colors.grey[700])),
+                          new Checkbox(
+                              value: (_dateFormat ==
+                                  DateFormat.HOUR_MINUTE_SECOND),
+                              onChanged: (value) {
+                                if (value) {
+                                  setState(() {
+                                    _dateFormat = DateFormat.HOUR_MINUTE_SECOND;
+                                    inputCheck(isZH
+                                        ? DateFormat.ZH_HOUR_MINUTE_SECOND
+                                        : _dateFormat);
+                                  });
+                                }
+                              })
+                        ],
+                      ),
+                    ),
+                    new Padding(
+                      padding: const EdgeInsets.only(
+                          top: 16.0, left: 5.0, right: 5.0),
+                      child: new Column(
+                        children: <Widget>[
+                          new Text("H_M",
+                              style: new TextStyle(
+                                  fontSize: 12.0, color: Colors.grey[700])),
+                          new Checkbox(
+                              value: (_dateFormat == DateFormat.HOUR_MINUTE),
+                              onChanged: (value) {
+                                if (value) {
+                                  setState(() {
+                                    _dateFormat = DateFormat.HOUR_MINUTE;
+                                    inputCheck(isZH
+                                        ? DateFormat.ZH_HOUR_MINUTE
+                                        : _dateFormat);
+                                  });
+                                }
+                              })
                         ],
                       ),
                     )
