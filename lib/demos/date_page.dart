@@ -286,7 +286,6 @@ class DatePageState extends State<DatePage> {
                 ),
                 new Container(
                   alignment: Alignment.topLeft,
-                  height: 80,
                   padding: EdgeInsets.all(16),
                   child: new Text(
                     _checkResult,
@@ -310,7 +309,7 @@ class DatePageState extends State<DatePage> {
           "\n" +
           DateUtil.getWeekDay(DateTime.now()) +
           "   " +
-          DateUtil.getZHWeekDay(DateTime.now());
+          DateUtil.getZHWeekDay(DateTime.now())+"\n"+DateTime.now().toString();
     });
   }
 }
