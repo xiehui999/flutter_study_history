@@ -28,7 +28,7 @@ class MainDemosPageState extends State<MainDemosPage> {
     mItemList.add(new ItemModel('城市列表', new CitySelectPage('城市列表')));
     mItemList.add(new ItemModel('Date Util', new DatePage('Date Util')));
     mItemList.add(new ItemModel('Regex Util', new RegexUtilPage()));
-    mItemList.add(new ItemModel('Widget Util', null));
+    mItemList.add(new ItemModel('Widget Util', new WidgetPage()));
     mItemList.add(new ItemModel('Timer Util', null));
     mItemList.add(new ItemModel('Money Util', null));
     mItemList.add(new ItemModel('Timeline Util', null));
