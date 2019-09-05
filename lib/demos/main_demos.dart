@@ -30,9 +30,7 @@ class MainDemosPageState extends State<MainDemosPage> {
     mItemList.add(new ItemModel('Regex Util', new RegexUtilPage()));
     mItemList.add(new ItemModel('Widget Util', new WidgetPage()));
     mItemList.add(new ItemModel('Timer Util', new TimerPage()));
-    mItemList.add(new ItemModel('Money Util', null));
-    mItemList.add(new ItemModel('Timeline Util', null));
-    mItemList.add(new ItemModel('圆形/圆角头像"', null));
+    mItemList.add(new ItemModel('圆形/圆角头像"', new RoundPage()));
     mItemList.add(new ItemModel('获取图片尺寸', null));
   }
 
