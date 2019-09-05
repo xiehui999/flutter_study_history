@@ -31,7 +31,7 @@ class MainDemosPageState extends State<MainDemosPage> {
     mItemList.add(new ItemModel('Widget Util', new WidgetPage()));
     mItemList.add(new ItemModel('Timer Util', new TimerPage()));
     mItemList.add(new ItemModel('圆形/圆角头像"', new RoundPage()));
-    mItemList.add(new ItemModel('获取图片尺寸', null));
+    mItemList.add(new ItemModel('获取图片尺寸', new ImageSizePage()));
   }
 
   @override
