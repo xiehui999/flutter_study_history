@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_study_history/common/component_index.dart';
 import 'package:flutter_study_history/ui/pages/page_index.dart';
 import 'package:flutter_study_history/demos/main_demos.dart';
+
 class PageInfo {
   PageInfo(this.titleId, this.iconData, this.page, [this.withScaffold = true]);
 
@@ -21,7 +22,7 @@ class MainLeftPage extends StatefulWidget {
 class MainLeftPageState extends State<MainLeftPage> {
   List<PageInfo> _pageInfo = new List();
   PageInfo loginOut =
-  PageInfo(Ids.titleSignOut, Icons.power_settings_new, null);
+      PageInfo(Ids.titleSignOut, Icons.power_settings_new, null);
   String _userName;
 
   @override
@@ -29,7 +30,7 @@ class MainLeftPageState extends State<MainLeftPage> {
     super.initState();
     _pageInfo.add(PageInfo(Ids.titleCollection, Icons.collections, null));
     _pageInfo.add(PageInfo(Ids.titleSetting, Icons.settings, SettingPage()));
-    _pageInfo.add(PageInfo(Ids.titleAbout, Icons.info, null));
+    _pageInfo.add(PageInfo(Ids.titleAbout, Icons.info, new AboutPage()));
     _pageInfo.add(PageInfo(Ids.titleShare, Icons.share, null));
   }
 
@@ -38,7 +39,7 @@ class MainLeftPageState extends State<MainLeftPage> {
     if (Util.isLogin()) {
       _pageInfo.add(loginOut);
       UserModel userModel =
-      SpHelper.getObject<UserModel>(BaseConstant.keyUserModel);
+          SpHelper.getObject<UserModel>(BaseConstant.keyUserModel);
       _userName = userModel?.username ?? "";
     } else {
       _userName = "Code4Android";
@@ -51,13 +52,9 @@ class MainLeftPageState extends State<MainLeftPage> {
         children: <Widget>[
           new Container(
             height: 176,
-            color: Theme
-                .of(context)
-                .primaryColor,
+            color: Theme.of(context).primaryColor,
             padding: EdgeInsets.only(
-                top: ScreenUtil
-                    .getInstance()
-                    .statusBarHeight, left: 10.0),
+                top: ScreenUtil.getInstance().statusBarHeight, left: 10.0),
             child: new Stack(
               children: <Widget>[
                 new Column(
@@ -71,7 +68,7 @@ class MainLeftPageState extends State<MainLeftPage> {
                           shape: BoxShape.circle,
                           image: DecorationImage(
                               image:
-                              AssetImage(Utils.getImgPath('ali_connors')))),
+                                  AssetImage(Utils.getImgPath('ali_connors')))),
                     ),
                     new Text(
                       _userName,
@@ -105,16 +102,14 @@ class MainLeftPageState extends State<MainLeftPage> {
               color: Colors.grey[200],
               child: new InkWell(
                 onTap: () {
-                  NavigatorUtil.pushPage(
-                      context, MainDemosPage(), pageName: 'Flutter Demos');
+                  NavigatorUtil.pushPage(context, MainDemosPage(),
+                      pageName: 'Flutter Demos');
                 },
                 child: new Center(
                   child: new Text(
                     'Flutter Demos',
                     style: new TextStyle(
-                        color: Theme
-                            .of(context)
-                            .primaryColor, fontSize: 16),
+                        color: Theme.of(context).primaryColor, fontSize: 16),
                   ),
                 ),
               ),
@@ -129,7 +124,7 @@ class MainLeftPageState extends State<MainLeftPage> {
                     return new ListTile(
                       leading: new Icon(pageInfo.iconData),
                       title:
-                      Text(IntlUtil.getString(context, pageInfo.titleId)),
+                          Text(IntlUtil.getString(context, pageInfo.titleId)),
                       onTap: () {
                         NavigatorUtil.pushPage(context, pageInfo.page,
                             pageName: pageInfo.titleId,
