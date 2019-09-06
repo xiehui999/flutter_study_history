@@ -58,4 +58,19 @@ class Utils {
     }
     return false;
   }
+
+  static bool isLatest(String version) {
+    String locVersion = AppConfig.version;
+    List<String> list = version.split('.');
+    List<String> locList = locVersion.split('.');
+    int lengthList = list.length;
+    if (locList.length < list.length) return false;
+    if (locList.length > list.length) return true;
+    for (int i = 0, length = locList.length; i < length; i++) {
+      if (int.tryParse(locList[i]) < int.tryParse(list[i])) return false;
+      if (i == (length - 1)) {
+        return true;
+      }
+    }
+  }
 }

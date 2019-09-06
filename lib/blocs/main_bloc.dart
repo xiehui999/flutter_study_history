@@ -81,8 +81,14 @@ class MainBloc implements BlocBase {
   Stream<List<TreeModel>> get treeStream => _tree.stream;
   List<TreeModel> _treeList;
 
-  ///****体系结束****/
+  ///****体系结束****///
 
+  BehaviorSubject<VersionModel> _version = BehaviorSubject<VersionModel>();
+
+  Sink<VersionModel> get _versionSink => _version.sink;
+
+  Stream<VersionModel> get versionStream => _version.stream.asBroadcastStream();
+  VersionModel _versionModel;
   WanRepository wanRepository = new WanRepository();
 
   HttpUtils httpUtils = new HttpUtils();
@@ -258,6 +264,13 @@ class MainBloc implements BlocBase {
         _tree.sink.addError("error");
         homeEventSink.add(new StatusEvent(labelId, RefreshStatus.failed));
       }
+    });
+  }
+
+  Future getVersion() async {
+    return httpUtils.getVersion().then((model) {
+      _versionModel = model;
+      _versionSink.add(_versionModel);
     });
   }
 }

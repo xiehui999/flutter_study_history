@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_study_history/common/component_index.dart';
 
 class AboutPage extends StatelessWidget {
+  bool isInit = true;
   ComModel github = new ComModel(
       title: 'GitHub', url: 'https://github.com/xiehui999', extra: 'Go Star');
   ComModel author = new ComModel(
@@ -11,6 +12,14 @@ class AboutPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final MainBloc bloc = BlocProvider.of<MainBloc>(context);
+    if (isInit) {
+      Observable.just(1).delay(new Duration(milliseconds: 500)).listen((_) {
+        bloc.getVersion();
+      });
+      isInit = false;
+    }
+
     return new Scaffold(
       appBar: new AppBar(
         title: new Text(IntlUtil.getString(context, Ids.titleAbout)),
@@ -50,6 +59,52 @@ class AboutPage extends StatelessWidget {
           new ArrowItem(github),
           new ArrowItem(author),
           new ArrowItem(weibo),
+          new StreamBuilder(
+              stream: bloc.versionStream,
+              builder:
+                  (BuildContext contex, AsyncSnapshot<VersionModel> snapshot) {
+                VersionModel model = snapshot.data;
+                return new Container(
+                  child: Material(
+                    color: Colors.white,
+                    child: new ListTile(
+                      onTap: () {
+                        if (model == null) {
+                          bloc.getVersion();
+                        } else {
+                          if (!Utils.isLatest(model.version)) {
+                            NavigatorUtil.launchInBrowser(model.url,
+                                title: model.title);
+                          }
+                        }
+                      },
+                      title: new Text('版本更新'),
+                      trailing: new Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: <Widget>[
+                          new Text(
+                            model == null
+                                ? ''
+                                : (Utils.isLatest(model.version)
+                                    ? '已是最新版本'
+                                    : "有版本更新，去更新吧"),
+                            style: new TextStyle(
+                                color: (model != null &&
+                                        Utils.isLatest(model.version)
+                                    ? Colors.grey
+                                    : Colors.red),
+                                fontSize: 14),
+                          ),
+                          new Icon(
+                            Icons.navigate_next,
+                            color: Colors.grey,
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              })
         ],
       ),
     );

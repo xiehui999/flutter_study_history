@@ -21,7 +21,7 @@ class HttpUtils {
         content: '',
         url:
             'https://raw.githubusercontent.com/Sky24n/LDocuments/master/AppStore/flutter_wanandroid_new.apk',
-        version: AppConfig.version,
+        version: AppConfig.remoteVersion,
       );
     });
   }
