@@ -3,13 +3,14 @@ import 'package:flutter_study_history/common/component_index.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_study_history/ui/pages/tab_page.dart';
+import 'package:flutter_study_history/ui/pages/page_index.dart';
 
 class NavigatorUtil {
   static void pushPage(BuildContext context, Widget page,
       {String pageName, bool needLogin = false}) {
     if (context == null || page == null) return;
     if (needLogin && !Util.isLogin()) {
-      pushPage(context, page);
+      pushPage(context, new UserLoginPage());
       return;
     }
     Navigator.push(

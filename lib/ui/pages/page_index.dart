@@ -9,3 +9,5 @@ export 'main_let_page.dart';
 export 'setting_page.dart';
 export 'language_page.dart';
 export 'about_page.dart';
+export 'collection_page.dart';
+export 'user_login_page.dart';
